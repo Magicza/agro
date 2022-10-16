@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: control-plane
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    name: ''
+    namespace: linkerd
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: linkerd
+    repoURL: 'https://github.com/Magicza/agro.git'
+    targetRevision: main
+  project: default
