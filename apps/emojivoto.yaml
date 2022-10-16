@@ -1,0 +1,71 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: emojivoto
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    name: ''
+    namespace: emojivoto
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: emojivoto
+    repoURL: 'https://github.com/Magicza/agro.git'
+    targetRevision: main
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - Validate=false
+      - PruneLast=true
+      - RespectIgnoreDifferences=true
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - PrunePropagationPolicy=foreground
+      - Replace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        maxDuration: 3m0s
+        factor: 2
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: emojivoto-remote
+#   namespace: argocd
+#   finalizers:
+#     - resources-finalizer.argocd.argoproj.io
+# spec:
+#   destination:
+#     name: 'in-cluster'
+#     namespace: emojivoto
+#     server: ''
+#   source:
+#     path: emojivoto
+#     repoURL: 'https://github.com/Magicza/agro.git'
+#     targetRevision: main
+#   project: default
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - Validate=false
+#       - PruneLast=true
+#       - RespectIgnoreDifferences=true
+#       - CreateNamespace=true
+#       - ApplyOutOfSyncOnly=true
+#       - PrunePropagationPolicy=foreground
+#       - Replace=true
+#     retry:
+#       limit: 5
+#       backoff:
+#         duration: 5s
+#         maxDuration: 3m0s
+#         factor: 2
