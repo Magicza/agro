@@ -8,10 +8,9 @@ metadata:
 spec:
   destination:
     name: ''
-    namespace: linkerd
     server: 'https://kubernetes.default.svc'
   source:
-    path: linkerd
+    path: control-plane
     repoURL: 'https://github.com/Magicza/agro.git'
     targetRevision: main
   project: default
@@ -19,3 +18,4 @@ spec:
     automated:
       prune: true
       selfHeal: true
+---
