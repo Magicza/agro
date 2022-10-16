@@ -15,3 +15,7 @@ spec:
     repoURL: 'https://github.com/Magicza/agro.git'
     targetRevision: main
   project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
