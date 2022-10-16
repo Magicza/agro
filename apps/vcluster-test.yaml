@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: control-plane
+  name: test-cluster
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,7 +10,7 @@ spec:
     name: ''
     server: 'https://kubernetes.default.svc'
   source:
-    path: control-plane
+    path: vcluster
     repoURL: 'https://github.com/Magicza/agro.git'
     targetRevision: main
   project: default

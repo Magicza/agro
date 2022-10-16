@@ -1,0 +1,64 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vcluster-test
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: vcluster
+    repoURL: "https://charts.loft.sh"
+    targetRevision: 1.9.1
+    helm:
+      releaseName: test-vcluster
+      values: |
+        vcluster:
+          image: "rancher/k3s:v1.23.5-k3s1"
+        
+        sync:
+          nodes:
+            enabled: true
+            syncAllNodes: true
+
+        init:
+          helm:
+            - chart:
+                name: argo-cd
+                repo: "https://argoproj.github.io/argo-helm"
+                version: v5.6.0
+              values: |-
+                installCRDs: true
+              release:
+                name: argo-cd
+                namespace: argocd
+
+          manifests: |-
+            apiVersion: argoproj.io/v1alpha1
+            kind: Application
+            metadata:
+              name: emojivoto
+              namespace: argocd
+              finalizers:
+                - resources-finalizer.argocd.argoproj.io
+            spec:
+              destination:
+                name: ''
+                namespace: emojivoto
+                server: 'https://kubernetes.default.svc'
+              source:
+                path: emojivoto
+                repoURL: 'https://github.com/Magicza/agro.git'
+                targetRevision: main
+              project: default
+              syncPolicy:
+                automated:
+                  prune: true
+                  selfHeal: true
+
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: vc-test
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
